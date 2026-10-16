@@ -4,6 +4,8 @@ Working Python/FastAPI/MongoDB backend for automated company discovery and vacan
 
 See [architecture, schema and implementation plan](docs/architecture.md) for supported contracts, coverage boundaries and production work still required. This initial code is production-oriented infrastructure, not an exhaustive or production-certified crawler.
 
+See the [current system diagram](docs/system-diagram.md) for the implemented data flow and runtime components.
+
 ## Small integration test first
 
 Requires Python 3.11+:
