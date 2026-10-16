@@ -1,0 +1,30 @@
+services:
+  mongo:
+    image: mongo:7
+    ports: ["127.0.0.1:27017:27017"]
+    volumes: ["mongo-data:/data/db"]
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  api:
+    build: .
+    env_file: .env
+    environment:
+      MONGO_URI: ${MONGO_URI:-mongodb://mongo:27017}
+    ports: ["127.0.0.1:8000:8000"]
+    depends_on:
+      mongo: {condition: service_healthy}
+    restart: unless-stopped
+  worker:
+    build: .
+    env_file: .env
+    environment:
+      MONGO_URI: ${MONGO_URI:-mongodb://mongo:27017}
+    command: ["jobintel", "worker", "--watch"]
+    depends_on:
+      mongo: {condition: service_healthy}
+    restart: unless-stopped
+volumes:
+  mongo-data:
